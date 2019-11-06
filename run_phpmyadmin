@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# script to run phpmyadmin in a docker container either pointing to an provided address or providing an interface to enter it.
+# m.opitz@qmul.ac.uk | 2018-07-06
+version="1.2"
+docker rm -f phpmyadmin >/dev/null 2>/dev/null
+port=8000
+echo "DockerPhpMyAdmin v.$version"
+if [ $# -eq 0 ]
+then
+	docker run -d -p ${port}:80 --name phpmyadmin -e PMA_ARBITRARY=1 phpmyadmin/phpmyadmin > /dev/null
+	echo "Now enter 'localhost:${port}' into your browser."
+else
+	ip=$1
+	if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+		docker run -d -p ${port}:80 --name phpmyadmin -e PMA_HOST=$1 phpmyadmin/phpmyadmin >/dev/null
+		echo "connected to $1"
+		echo "Now enter 'localhost:${port}' into your browser."
+	else
+		echo "$ip is not a valid IP address, skipping..."
+		docker run -d -p ${port}:80 --name phpmyadmin -e PMA_ARBITRARY=1 phpmyadmin/phpmyadmin > /dev/null
+	fi
+fi
+

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# scripy to start a MySQL server with a mapped local directory for data
+
+docker rm -f mysql-server >/dev/null 2>/dev/null
+docker run -d \
+        --name mysql-server \
+        -e MYSQL_ROOT_PASSWORD=rootpass \
+        -e MYSQL_USER=moodle_user \
+        -e MYSQL_PASSWORD=moodle \
+        -e MYSQL_ROOT_HOST=172.17.0.1 \
+        -p 3306:3306 \
+        -v /Users/opitz/workbench/mysql/mysqldata:/var/lib/mysql \
+ mysql/mysql-server:5.7
+
+ipaddr=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" mysql-server)
+echo "mysql-server running on $ipaddr"
+
