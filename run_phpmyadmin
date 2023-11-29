@@ -4,7 +4,7 @@
 # m.opitz@qmul.ac.uk | 2018-07-06
 version="1.2"
 docker rm -f phpmyadmin >/dev/null 2>/dev/null
-port=8000
+port=8008
 echo "DockerPhpMyAdmin v.$version"
 if [ $# -eq 0 ]
 then
